@@ -1,0 +1,60 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: pikachu-order-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: pikachu-config
+      profile: ${profiles.active}
+      label: master
+  rabbitmq:
+    addresses: localhost
+    username: guest
+    password: guest
+    port: 5672
+  #### 数据库连接池属性
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    username: root
+    password: Aizhupo7
+    url: jdbc:mysql://144.34.254.197:3306/pikachu?useSSL=false&characterEncoding=utf8
+    hikari:
+      # 是否自动提交
+      auto-commit: true
+      # 如果在没有连接可用的情况下超过此时间，则将抛出SQLException
+      connection-timeout: 30000
+      # 控制允许连接在池中空闲的最长时间
+      idle-timeout: 600000
+      # 控制池中连接的最长生命周期。使用中的连接永远不会退役，只有当它关闭时才会被删除
+      max-lifetime: 1800000
+      # 如果您的驱动程序支持JDBC4，强烈建议不要设置此属性
+      # connection-test-query:
+      # 控制HikariCP尝试在池中维护的最小空闲连接数。建议不要设置此值，而是允许HikariCP充当固定大小的连接池。 默认值：与maximumPoolSize相同
+      # minimum-idle:
+      # 此属性控制允许池到达的最大大小，包括空闲和正在使用的连接。
+      maximum-pool-size: 10
+profiles:
+  active: dev
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:123456@localhost:8888/eureka
+    registry-fetch-interval-seconds: 10
+#关闭安全认证
+management:
+  security:
+    enabled: false
+
+  # mybatis对应的映射文件路径
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  # mybatis对应的实体类
+  type-aliases-package: com.cloud.pikachu.order.model
